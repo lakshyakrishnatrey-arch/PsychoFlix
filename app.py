@@ -1,6 +1,9 @@
 import streamlit as st
-
 from src.tmdb_recommender import TMDBRecommender
+
+# ----------------------------
+# Page Config
+# ----------------------------
 
 st.set_page_config(
     page_title="PsychoFlix",
@@ -8,16 +11,23 @@ st.set_page_config(
     layout="wide"
 )
 
+# ----------------------------
+# Load Recommender
+# ----------------------------
 
 @st.cache_resource
 def load_recommender():
     return TMDBRecommender()
 
+# ----------------------------
+# Main App
+# ----------------------------
 
 def main():
 
     st.markdown("""
     <style>
+
     .stApp{
         background-color:#121212;
         color:white;
@@ -35,26 +45,30 @@ def main():
         margin-bottom:30px;
     }
 
-    .stButton>button{
-        background:#E50914;
+    .stButton > button{
+        background-color:#E50914;
         color:white;
+        border:none;
         border-radius:10px;
         height:50px;
-        width:100%;
         font-size:18px;
-        border:none;
+        width:100%;
     }
 
-    .stButton>button:hover{
-        background:#B20710;
+    .stButton > button:hover{
+        background-color:#B20710;
     }
+
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <h1>🎬 PsychoFlix</h1>
-    <h3>AI Powered Psychological Movie Recommender</h3>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        """
+        <h1>🎬 PsychoFlix</h1>
+        <h3>AI Powered Psychological Movie Recommender</h3>
+        """,
+        unsafe_allow_html=True
+    )
 
     recommender = load_recommender()
 
@@ -72,16 +86,30 @@ def main():
         recommendations = recommender.recommend(movie_name)
 
         if recommendations is None or recommendations.empty:
-            st.error("Movie not found. Please check the spelling.")
+            st.error("Movie not found.")
             return
 
         st.subheader("🎥 Recommended Movies")
 
-        for i, (_, row) in enumerate(recommendations.iterrows(), start=1):
+        for _, row in recommendations.iterrows():
 
             with st.container(border=True):
 
-                st.markdown(f"### {i}. {row['title']}")
+                st.markdown(f"## 🎬 {row['title']}")
+
+                st.write(f"⭐ **Rating:** {row['vote_average']}")
+
+                genres = ", ".join(row["genres"])
+                st.write(f"🎭 **Genres:** {genres}")
+
+                year = str(row["release_date"])[:4]
+                st.write(f"📅 **Release Year:** {year}")
+
+                st.write("📝 **Overview**")
+
+                st.write(row["overview"])
+
+                st.divider()
 
 
 if __name__ == "__main__":

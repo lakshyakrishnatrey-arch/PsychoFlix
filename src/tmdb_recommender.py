@@ -6,6 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 class TMDBRecommender:
 
     def __init__(self):
+
         self.movies = pd.read_pickle(
             "preprocessing/processed_movies.pkl"
         )
@@ -22,7 +23,7 @@ class TMDBRecommender:
 
     def recommend(self, movie_title, top_n=10):
 
-        movie_title = movie_title.lower()
+        movie_title = movie_title.lower().strip()
 
         matches = self.movies[
             self.movies["title"].str.lower() == movie_title
@@ -45,4 +46,12 @@ class TMDBRecommender:
 
         movie_indices = [i[0] for i in scores]
 
-        return self.movies.iloc[movie_indices][["title"]]
+        return self.movies.iloc[movie_indices][
+            [
+                "title",
+                "genres",
+                "vote_average",
+                "release_date",
+                "overview"
+            ]
+        ]

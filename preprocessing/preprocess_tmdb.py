@@ -1,11 +1,14 @@
 import pandas as pd
 import ast
 
+# -------------------------------
 # Load TMDB datasets
+# -------------------------------
+
 movies = pd.read_csv("dataset/tmdb/tmdb_5000_movies.csv")
 credits = pd.read_csv("dataset/tmdb/tmdb_5000_credits.csv")
 
-# Rename movie ID column to match
+# Rename movie ID column
 movies = movies.rename(columns={"id": "movie_id"})
 
 # Merge datasets
@@ -47,7 +50,7 @@ def extract_director(text):
 
 
 # -------------------------------
-# Extract Features
+# Feature Extraction
 # -------------------------------
 
 merged["genres"] = merged["genres"].apply(extract_names)
@@ -55,7 +58,6 @@ merged["keywords"] = merged["keywords"].apply(extract_names)
 merged["cast"] = merged["cast"].apply(extract_cast)
 merged["director"] = merged["crew"].apply(extract_director)
 
-# Fill missing text columns
 merged["overview"] = merged["overview"].fillna("")
 merged["tagline"] = merged["tagline"].fillna("")
 
@@ -72,13 +74,24 @@ merged["tags"] = merged.apply(
     axis=1,
 )
 
+# -------------------------------
 # Save processed dataset
-processed = merged[["movie_id", "title_x", "tags"]].rename(
-    columns={"title_x": "title"}
-)
+# -------------------------------
+
+processed = merged[
+    [
+        "movie_id",
+        "title_x",
+        "genres",
+        "vote_average",
+        "release_date",
+        "overview",
+        "tags",
+    ]
+].rename(columns={"title_x": "title"})
 
 processed.to_pickle("preprocessing/processed_movies.pkl")
 
 print("✅ Preprocessing completed successfully!")
-print("✅ File saved as preprocessing/processed_movies.pkl")
-print(f"Total movies processed: {len(processed)}")
+print(f"Movies processed: {len(processed)}")
+print("Saved preprocessing/processed_movies.pkl")
