@@ -1,8 +1,11 @@
 import streamlit as st
+import plotly.express as px
+
 from src.tmdb_recommender import TMDBRecommender
+from src.analytics import MovieAnalytics
 
 # -------------------------------------------------
-# Page Configuration
+# PAGE CONFIG
 # -------------------------------------------------
 
 st.set_page_config(
@@ -12,55 +15,64 @@ st.set_page_config(
 )
 
 # -------------------------------------------------
-# Load Recommendation Engine
+# LOAD DATA
 # -------------------------------------------------
 
 @st.cache_resource
 def load_recommender():
     return TMDBRecommender()
 
+@st.cache_resource
+def load_analytics():
+    return MovieAnalytics()
+
+recommender = load_recommender()
+analytics = load_analytics()
 
 # -------------------------------------------------
-# Custom CSS
+# CSS
 # -------------------------------------------------
 
 st.markdown("""
 <style>
 
 .stApp{
-    background-color:#121212;
+    background:#121212;
     color:white;
 }
 
 h1{
     color:#E50914;
     text-align:center;
-    font-size:3rem;
 }
 
-h3{
-    text-align:center;
+h2{
     color:white;
 }
 
 div[data-testid="stSidebar"]{
-    background:#1A1A1A;
+    background:#1b1b1b;
 }
 
-.stButton>button{
+.stButton > button{
     background:#E50914;
     color:white;
-    border-radius:10px;
     border:none;
+    border-radius:10px;
     height:50px;
+    width:100%;
     font-size:18px;
+}
+
+.stButton > button:hover{
+    background:#B20710;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Sidebar
+# SIDEBAR
 # -------------------------------------------------
 
 page = st.sidebar.radio(
@@ -73,10 +85,8 @@ page = st.sidebar.radio(
     ]
 )
 
-recommender = load_recommender()
-
 # -------------------------------------------------
-# HOME PAGE
+# HOME
 # -------------------------------------------------
 
 if page == "🏠 Home":
@@ -84,20 +94,22 @@ if page == "🏠 Home":
     st.markdown(
         """
         <h1>🎬 PsychoFlix</h1>
-        <h3>AI Powered Psychological Movie Recommender</h3>
+        <h3 style="text-align:center;">
+        AI Powered Psychological Movie Recommender
+        </h3>
         """,
         unsafe_allow_html=True
     )
 
     movie_name = st.text_input(
-        "🔍 Search a Movie",
+        "🔍 Search for a Movie",
         placeholder="Avatar, Interstellar, Inception..."
     )
 
     if st.button("Recommend"):
 
         if movie_name.strip() == "":
-            st.warning("Please enter a movie name.")
+            st.warning("Please enter a movie.")
             st.stop()
 
         recommendations = recommender.recommend(movie_name)
@@ -133,36 +145,98 @@ if page == "🏠 Home":
                 st.write("📝 **Overview**")
 
                 st.write(row["overview"])
-
-# -------------------------------------------------
+                # -------------------------------------------------
 # ANALYTICS PAGE
 # -------------------------------------------------
 
 elif page == "📊 Analytics":
 
-    st.title("📊 Movie Analytics")
+    st.title("📊 Movie Analytics Dashboard")
 
     col1, col2 = st.columns(2)
 
     with col1:
         st.metric(
-            "Movies",
-            len(recommender.movies)
+            "🎬 Total Movies",
+            analytics.total_movies()
         )
 
     with col2:
         st.metric(
-            "Average Rating",
-            round(
-                recommender.movies["vote_average"].mean(),
-                2
-            )
+            "⭐ Average Rating",
+            analytics.average_rating()
         )
 
     st.divider()
 
-    st.write(
-        "Analytics dashboard will be added in the next phase."
+    # Top Rated Movies
+    st.subheader("⭐ Top Rated Movies")
+
+    st.dataframe(
+        analytics.top_movies(),
+        use_container_width=True,
+        hide_index=True
+    )
+
+    st.divider()
+
+    # Rating Distribution
+    st.subheader("📈 Rating Distribution")
+
+    fig = px.histogram(
+        x=analytics.ratings(),
+        nbins=20,
+        labels={"x": "Rating", "y": "Movies"},
+        title="Distribution of Movie Ratings"
+    )
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
+    st.divider()
+
+    # Genre Distribution
+    st.subheader("🎭 Top 10 Genres")
+
+    genre_counts = analytics.genre_counts().head(10)
+
+    genre_fig = px.bar(
+        x=genre_counts.index,
+        y=genre_counts.values,
+        labels={
+            "x": "Genre",
+            "y": "Number of Movies"
+        },
+        title="Top 10 Movie Genres"
+    )
+
+    st.plotly_chart(
+        genre_fig,
+        use_container_width=True
+    )
+
+    st.divider()
+
+    # Release Year Trend
+    st.subheader("📅 Movies Released Per Year")
+
+    release_data = analytics.release_years()
+
+    release_fig = px.line(
+        x=release_data.index,
+        y=release_data.values,
+        labels={
+            "x": "Year",
+            "y": "Movies Released"
+        },
+        title="Movie Release Trend"
+    )
+
+    st.plotly_chart(
+        release_fig,
+        use_container_width=True
     )
 
 # -------------------------------------------------
@@ -171,21 +245,22 @@ elif page == "📊 Analytics":
 
 elif page == "🧠 Mood Recommender":
 
-    st.title("🧠 Mood Recommender")
+    st.title("🧠 Mood Based Recommendation")
 
     mood = st.selectbox(
-        "Choose your mood",
+        "Choose your current mood",
         [
-            "Happy",
-            "Sad",
-            "Motivated",
-            "Relaxed",
-            "Stressed"
+            "😊 Happy",
+            "😔 Sad",
+            "😌 Relaxed",
+            "💪 Motivated",
+            "😰 Stressed"
         ]
     )
 
     st.info(
-        f"Mood-based recommendations for **{mood}** will be implemented in the next phase."
+        "Psychological recommendations based on mood "
+        "will be implemented in the next phase."
     )
 
 # -------------------------------------------------
@@ -194,24 +269,36 @@ elif page == "🧠 Mood Recommender":
 
 elif page == "ℹ About":
 
-    st.title("About PsychoFlix")
+    st.title("🎬 About PsychoFlix")
 
     st.write("""
-PsychoFlix is an AI-powered movie recommendation system built using Data Mining and Machine Learning techniques.
+### AI Powered Psychological Movie Recommendation System
 
-Current technologies:
+PsychoFlix is a Data Mining project that recommends movies
+using Machine Learning and content-based filtering.
 
-- TMDB Dataset
-- Data Preprocessing
-- TF-IDF
-- Cosine Similarity
+### Technologies Used
+
+- Python
 - Streamlit
+- Pandas
+- Plotly
+- Scikit-learn
+- TF-IDF Vectorization
+- Cosine Similarity
+- TMDB Dataset
 
-Upcoming features:
+### Dataset
 
-- Movie Posters
-- K-Means Clustering
-- Analytics Dashboard
-- Psychological Recommendation Engine
-- Mood Detection
+- 4803 Movies
+- Content-based Recommendation
+- Metadata Analysis
+
+### Upcoming Features
+
+- 🎬 Movie Posters
+- 🤖 K-Means Clustering
+- 📊 Advanced Dashboard
+- 🧠 Psychological Recommendation Engine
+- 🎭 Mood Prediction
 """)

@@ -1,17 +1,13 @@
-# CLAUDE.md
+# CLAUDE.mdThe project does not run.
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+There is a Python SyntaxError in src/recommender.py on line 33:
+"SyntaxError: '[' was never closed"
 
-## Common Commands
+Please open src/recommender.py, fix the syntax error, check the entire file for any other syntax errors, save it, and then run:
 
-- **Install dependencies**: `pip install -r requirements.txt`
-- **Run app**: `streamlit run app.py`
-- **Lint**: `flake8 . --max-line-length=120`
-- **Test**: `pytest tests/`
-- **Run single test**: `pytest tests/test_recommendations.py`
-- **Build analytics**: `python analytics/build.py`
+python -m streamlit run app.py
 
-## Architecture Overview
+Keep fixing errors until the application opens successfully without any exceptions.
 
 The project follows a modular structure with these key components:
 
