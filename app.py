@@ -4,6 +4,13 @@ import pandas as pd
 from src.recommender import Recommender
 
 
+st.set_page_config(
+    page_title="PsychoFlix",
+    page_icon="🎬",
+    layout="wide"
+)
+
+
 @st.cache_data
 def load_data():
     movies = pd.read_csv("dataset/movies.csv")
@@ -12,37 +19,39 @@ def load_data():
 
 
 def main():
-    # Custom CSS
+
     st.markdown("""
     <style>
-    .stApp {
-        background-color: #121212;
-        color: white;
+    .stApp{
+        background-color:#121212;
+        color:white;
     }
 
-    h1 {
-        color: #E50914;
-        text-align: center;
-        font-size: 3rem;
+    h1{
+        color:#E50914;
+        text-align:center;
     }
 
-    .stButton > button {
-        background-color: #E50914;
-        color: white;
-        border-radius: 10px;
-        height: 3em;
-        width: 100%;
-        font-size: 18px;
-        border: none;
+    h3{
+        text-align:center;
+        color:white;
     }
 
-    .stButton > button:hover {
-        background-color: #B20710;
+    .stButton>button{
+        background:#E50914;
+        color:white;
+        border-radius:10px;
+        height:50px;
+        width:100%;
+        font-size:18px;
     }
     </style>
     """, unsafe_allow_html=True)
 
-    st.title("🎬 Movie Recommendation System")
+    st.markdown("""
+    <h1>PsychoFlix</h1>
+    <h3>AI Powered Psychological Movie Recommender</h3>
+    """, unsafe_allow_html=True)
 
     movies, responses = load_data()
 
@@ -51,22 +60,28 @@ def main():
     if st.button("Recommend"):
 
         recommender = Recommender(movies, responses)
-
         recommendations = recommender.recommend(current_user)
 
         st.subheader("Recommended Movies")
 
         if recommendations.empty:
             st.warning("No recommendations found.")
+
         else:
-            if "title" in recommendations.columns:
-                st.dataframe(recommendations[["title"]])
 
-            elif "Movie Title" in recommendations.columns:
-                st.dataframe(recommendations[["Movie Title"]])
+            for _, row in recommendations.iterrows():
 
-            else:
-                st.dataframe(recommendations)
+                st.container(border=True)
+
+                col1, col2 = st.columns([4, 1])
+
+                with col1:
+                    st.markdown(f"### {row['title']}")
+                    if "genre" in row:
+                        st.write(f"🎭 {row['genre']}")
+
+                with col2:
+                    st.write("⭐")
 
 
 if __name__ == "__main__":
