@@ -1,9 +1,9 @@
 import streamlit as st
 from src.tmdb_recommender import TMDBRecommender
 
-# ----------------------------
-# Page Config
-# ----------------------------
+# -------------------------------------------------
+# Page Configuration
+# -------------------------------------------------
 
 st.set_page_config(
     page_title="PsychoFlix",
@@ -11,56 +11,75 @@ st.set_page_config(
     layout="wide"
 )
 
-# ----------------------------
-# Load Recommender
-# ----------------------------
+# -------------------------------------------------
+# Load Recommendation Engine
+# -------------------------------------------------
 
 @st.cache_resource
 def load_recommender():
     return TMDBRecommender()
 
-# ----------------------------
-# Main App
-# ----------------------------
 
-def main():
+# -------------------------------------------------
+# Custom CSS
+# -------------------------------------------------
 
-    st.markdown("""
-    <style>
+st.markdown("""
+<style>
 
-    .stApp{
-        background-color:#121212;
-        color:white;
-    }
+.stApp{
+    background-color:#121212;
+    color:white;
+}
 
-    h1{
-        color:#E50914;
-        text-align:center;
-        font-size:3.2rem;
-    }
+h1{
+    color:#E50914;
+    text-align:center;
+    font-size:3rem;
+}
 
-    h3{
-        text-align:center;
-        color:white;
-        margin-bottom:30px;
-    }
+h3{
+    text-align:center;
+    color:white;
+}
 
-    .stButton > button{
-        background-color:#E50914;
-        color:white;
-        border:none;
-        border-radius:10px;
-        height:50px;
-        font-size:18px;
-        width:100%;
-    }
+div[data-testid="stSidebar"]{
+    background:#1A1A1A;
+}
 
-    .stButton > button:hover{
-        background-color:#B20710;
-    }
+.stButton>button{
+    background:#E50914;
+    color:white;
+    border-radius:10px;
+    border:none;
+    height:50px;
+    font-size:18px;
+}
 
-    </style>
-    """, unsafe_allow_html=True)
+</style>
+""", unsafe_allow_html=True)
+
+# -------------------------------------------------
+# Sidebar
+# -------------------------------------------------
+
+page = st.sidebar.radio(
+    "Navigation",
+    [
+        "🏠 Home",
+        "📊 Analytics",
+        "🧠 Mood Recommender",
+        "ℹ About"
+    ]
+)
+
+recommender = load_recommender()
+
+# -------------------------------------------------
+# HOME PAGE
+# -------------------------------------------------
+
+if page == "🏠 Home":
 
     st.markdown(
         """
@@ -70,24 +89,22 @@ def main():
         unsafe_allow_html=True
     )
 
-    recommender = load_recommender()
-
     movie_name = st.text_input(
-        "🔍 Search for a movie",
-        placeholder="Example: Avatar, Interstellar, Inception"
+        "🔍 Search a Movie",
+        placeholder="Avatar, Interstellar, Inception..."
     )
 
     if st.button("Recommend"):
 
         if movie_name.strip() == "":
             st.warning("Please enter a movie name.")
-            return
+            st.stop()
 
         recommendations = recommender.recommend(movie_name)
 
         if recommendations is None or recommendations.empty:
             st.error("Movie not found.")
-            return
+            st.stop()
 
         st.subheader("🎥 Recommended Movies")
 
@@ -97,20 +114,104 @@ def main():
 
                 st.markdown(f"## 🎬 {row['title']}")
 
-                st.write(f"⭐ **Rating:** {row['vote_average']}")
+                st.write(
+                    f"⭐ **Rating:** {row['vote_average']}"
+                )
 
                 genres = ", ".join(row["genres"])
-                st.write(f"🎭 **Genres:** {genres}")
+
+                st.write(
+                    f"🎭 **Genres:** {genres}"
+                )
 
                 year = str(row["release_date"])[:4]
-                st.write(f"📅 **Release Year:** {year}")
+
+                st.write(
+                    f"📅 **Release Year:** {year}"
+                )
 
                 st.write("📝 **Overview**")
 
                 st.write(row["overview"])
 
-                st.divider()
+# -------------------------------------------------
+# ANALYTICS PAGE
+# -------------------------------------------------
 
+elif page == "📊 Analytics":
 
-if __name__ == "__main__":
-    main()
+    st.title("📊 Movie Analytics")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.metric(
+            "Movies",
+            len(recommender.movies)
+        )
+
+    with col2:
+        st.metric(
+            "Average Rating",
+            round(
+                recommender.movies["vote_average"].mean(),
+                2
+            )
+        )
+
+    st.divider()
+
+    st.write(
+        "Analytics dashboard will be added in the next phase."
+    )
+
+# -------------------------------------------------
+# MOOD PAGE
+# -------------------------------------------------
+
+elif page == "🧠 Mood Recommender":
+
+    st.title("🧠 Mood Recommender")
+
+    mood = st.selectbox(
+        "Choose your mood",
+        [
+            "Happy",
+            "Sad",
+            "Motivated",
+            "Relaxed",
+            "Stressed"
+        ]
+    )
+
+    st.info(
+        f"Mood-based recommendations for **{mood}** will be implemented in the next phase."
+    )
+
+# -------------------------------------------------
+# ABOUT PAGE
+# -------------------------------------------------
+
+elif page == "ℹ About":
+
+    st.title("About PsychoFlix")
+
+    st.write("""
+PsychoFlix is an AI-powered movie recommendation system built using Data Mining and Machine Learning techniques.
+
+Current technologies:
+
+- TMDB Dataset
+- Data Preprocessing
+- TF-IDF
+- Cosine Similarity
+- Streamlit
+
+Upcoming features:
+
+- Movie Posters
+- K-Means Clustering
+- Analytics Dashboard
+- Psychological Recommendation Engine
+- Mood Detection
+""")
