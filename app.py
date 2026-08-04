@@ -1,8 +1,6 @@
 import streamlit as st
-import pandas as pd
 
-from src.recommender import Recommender
-
+from src.tmdb_recommender import TMDBRecommender
 
 st.set_page_config(
     page_title="PsychoFlix",
@@ -11,11 +9,9 @@ st.set_page_config(
 )
 
 
-@st.cache_data
-def load_data():
-    movies = pd.read_csv("dataset/movies.csv")
-    responses = pd.read_csv("dataset/responses.csv")
-    return movies, responses
+@st.cache_resource
+def load_recommender():
+    return TMDBRecommender()
 
 
 def main():
@@ -30,11 +26,13 @@ def main():
     h1{
         color:#E50914;
         text-align:center;
+        font-size:3.2rem;
     }
 
     h3{
         text-align:center;
         color:white;
+        margin-bottom:30px;
     }
 
     .stButton>button{
@@ -44,44 +42,46 @@ def main():
         height:50px;
         width:100%;
         font-size:18px;
+        border:none;
+    }
+
+    .stButton>button:hover{
+        background:#B20710;
     }
     </style>
     """, unsafe_allow_html=True)
 
     st.markdown("""
-    <h1>PsychoFlix</h1>
+    <h1>🎬 PsychoFlix</h1>
     <h3>AI Powered Psychological Movie Recommender</h3>
     """, unsafe_allow_html=True)
 
-    movies, responses = load_data()
+    recommender = load_recommender()
 
-    current_user = st.text_input("Enter your User ID")
+    movie_name = st.text_input(
+        "🔍 Search for a movie",
+        placeholder="Example: Avatar, Interstellar, Inception"
+    )
 
     if st.button("Recommend"):
 
-        recommender = Recommender(movies, responses)
-        recommendations = recommender.recommend(current_user)
+        if movie_name.strip() == "":
+            st.warning("Please enter a movie name.")
+            return
 
-        st.subheader("Recommended Movies")
+        recommendations = recommender.recommend(movie_name)
 
-        if recommendations.empty:
-            st.warning("No recommendations found.")
+        if recommendations is None or recommendations.empty:
+            st.error("Movie not found. Please check the spelling.")
+            return
 
-        else:
+        st.subheader("🎥 Recommended Movies")
 
-            for _, row in recommendations.iterrows():
+        for i, (_, row) in enumerate(recommendations.iterrows(), start=1):
 
-                st.container(border=True)
+            with st.container(border=True):
 
-                col1, col2 = st.columns([4, 1])
-
-                with col1:
-                    st.markdown(f"### {row['title']}")
-                    if "genre" in row:
-                        st.write(f"🎭 {row['genre']}")
-
-                with col2:
-                    st.write("⭐")
+                st.markdown(f"### {i}. {row['title']}")
 
 
 if __name__ == "__main__":
