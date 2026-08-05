@@ -65,3 +65,8 @@ class TMDBRecommender:
         )
 
         return results
+    def movie_titles(self):
+
+        return sorted(
+            self.movies["title"].tolist()
+        )

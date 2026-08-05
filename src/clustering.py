@@ -1,5 +1,7 @@
 import pandas as pd
 
+from collections import Counter
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans
 
@@ -31,6 +33,34 @@ class MovieCluster:
             matrix
         )
 
+        self.cluster_names = self._generate_cluster_names()
+
+    def _generate_cluster_names(self):
+
+        names = {}
+
+        for cluster in sorted(self.movies["Cluster"].unique()):
+
+            cluster_movies = self.movies[
+                self.movies["Cluster"] == cluster
+            ]
+
+            genres = []
+
+            for g in cluster_movies["genres"]:
+                genres.extend(g)
+
+            top = Counter(genres).most_common(2)
+
+            if len(top) >= 2:
+                names[cluster] = f"{top[0][0]} & {top[1][0]}"
+            elif len(top) == 1:
+                names[cluster] = top[0][0]
+            else:
+                names[cluster] = "Mixed Movies"
+
+        return names
+
     def cluster_counts(self):
 
         return (
@@ -51,4 +81,11 @@ class MovieCluster:
         ].sort_values(
             by="vote_average",
             ascending=False
+        )
+
+    def cluster_name(self, cluster):
+
+        return self.cluster_names.get(
+            cluster,
+            "Unknown Cluster"
         )
