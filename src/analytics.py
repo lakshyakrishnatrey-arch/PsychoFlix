@@ -29,16 +29,13 @@ class MovieAnalytics:
         )
 
     def genre_counts(self):
-
         genres = self.movies["genres"].explode()
-
         return genres.value_counts()
 
     def ratings(self):
         return self.movies["vote_average"]
 
     def release_years(self):
-
         years = pd.to_datetime(
             self.movies["release_date"],
             errors="coerce"

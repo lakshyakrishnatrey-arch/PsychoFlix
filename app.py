@@ -3,6 +3,7 @@ import plotly.express as px
 
 from src.tmdb_recommender import TMDBRecommender
 from src.analytics import MovieAnalytics
+from src.clustering import MovieCluster
 
 # -------------------------------------------------
 # PAGE CONFIG
@@ -26,8 +27,13 @@ def load_recommender():
 def load_analytics():
     return MovieAnalytics()
 
+@st.cache_resource
+def load_cluster():
+    return MovieCluster()
+
 recommender = load_recommender()
 analytics = load_analytics()
+cluster = load_cluster()
 
 # -------------------------------------------------
 # CSS
@@ -44,9 +50,10 @@ st.markdown("""
 h1{
     color:#E50914;
     text-align:center;
+    font-size:3rem;
 }
 
-h2{
+h2,h3{
     color:white;
 }
 
@@ -86,7 +93,7 @@ page = st.sidebar.radio(
 )
 
 # -------------------------------------------------
-# HOME
+# HOME PAGE
 # -------------------------------------------------
 
 if page == "🏠 Home":
@@ -126,26 +133,18 @@ if page == "🏠 Home":
 
                 st.markdown(f"## 🎬 {row['title']}")
 
-                st.write(
-                    f"⭐ **Rating:** {row['vote_average']}"
-                )
+                st.write(f"⭐ **Rating:** {row['vote_average']}")
 
                 genres = ", ".join(row["genres"])
-
-                st.write(
-                    f"🎭 **Genres:** {genres}"
-                )
+                st.write(f"🎭 **Genres:** {genres}")
 
                 year = str(row["release_date"])[:4]
-
-                st.write(
-                    f"📅 **Release Year:** {year}"
-                )
+                st.write(f"📅 **Release Year:** {year}")
 
                 st.write("📝 **Overview**")
-
                 st.write(row["overview"])
-                # -------------------------------------------------
+
+# -------------------------------------------------
 # ANALYTICS PAGE
 # -------------------------------------------------
 
@@ -169,7 +168,6 @@ elif page == "📊 Analytics":
 
     st.divider()
 
-    # Top Rated Movies
     st.subheader("⭐ Top Rated Movies")
 
     st.dataframe(
@@ -180,13 +178,15 @@ elif page == "📊 Analytics":
 
     st.divider()
 
-    # Rating Distribution
     st.subheader("📈 Rating Distribution")
 
     fig = px.histogram(
         x=analytics.ratings(),
         nbins=20,
-        labels={"x": "Rating", "y": "Movies"},
+        labels={
+            "x":"Rating",
+            "y":"Movies"
+        },
         title="Distribution of Movie Ratings"
     )
 
@@ -197,7 +197,6 @@ elif page == "📊 Analytics":
 
     st.divider()
 
-    # Genre Distribution
     st.subheader("🎭 Top 10 Genres")
 
     genre_counts = analytics.genre_counts().head(10)
@@ -206,8 +205,8 @@ elif page == "📊 Analytics":
         x=genre_counts.index,
         y=genre_counts.values,
         labels={
-            "x": "Genre",
-            "y": "Number of Movies"
+            "x":"Genre",
+            "y":"Movies"
         },
         title="Top 10 Movie Genres"
     )
@@ -219,7 +218,6 @@ elif page == "📊 Analytics":
 
     st.divider()
 
-    # Release Year Trend
     st.subheader("📅 Movies Released Per Year")
 
     release_data = analytics.release_years()
@@ -228,8 +226,8 @@ elif page == "📊 Analytics":
         x=release_data.index,
         y=release_data.values,
         labels={
-            "x": "Year",
-            "y": "Movies Released"
+            "x":"Year",
+            "y":"Movies Released"
         },
         title="Movie Release Trend"
     )
@@ -237,6 +235,47 @@ elif page == "📊 Analytics":
     st.plotly_chart(
         release_fig,
         use_container_width=True
+    )
+    st.divider()
+
+    st.subheader("🤖 K-Means Cluster Distribution")
+
+    cluster_counts = cluster.cluster_counts()
+
+    cluster_fig = px.bar(
+        x=cluster_counts.index.astype(str),
+        y=cluster_counts.values,
+        labels={
+            "x": "Cluster",
+            "y": "Number of Movies"
+        },
+        title="Movies per Cluster",
+        color=cluster_counts.values,
+        color_continuous_scale="viridis"
+    )
+
+    st.plotly_chart(
+        cluster_fig,
+        use_container_width=True
+    )
+
+    st.divider()
+
+    st.subheader("🔍 Explore Movies in a Cluster")
+
+    selected_cluster = st.selectbox(
+        "Select Cluster",
+        sorted(cluster_counts.index)
+    )
+
+    cluster_movies = cluster.movies_in_cluster(
+        selected_cluster
+    )
+
+    st.dataframe(
+        cluster_movies,
+        use_container_width=True,
+        hide_index=True
     )
 
 # -------------------------------------------------
@@ -259,8 +298,12 @@ elif page == "🧠 Mood Recommender":
     )
 
     st.info(
-        "Psychological recommendations based on mood "
-        "will be implemented in the next phase."
+        f"""
+        You selected **{mood}**.
+
+        The psychological recommendation engine
+        will be added in the next phase.
+        """
     )
 
 # -------------------------------------------------
@@ -274,8 +317,8 @@ elif page == "ℹ About":
     st.write("""
 ### AI Powered Psychological Movie Recommendation System
 
-PsychoFlix is a Data Mining project that recommends movies
-using Machine Learning and content-based filtering.
+PsychoFlix is a Data Mining project built using Machine Learning
+and Content-Based Filtering.
 
 ### Technologies Used
 
@@ -286,19 +329,36 @@ using Machine Learning and content-based filtering.
 - Scikit-learn
 - TF-IDF Vectorization
 - Cosine Similarity
+- K-Means Clustering
 - TMDB Dataset
 
 ### Dataset
 
-- 4803 Movies
-- Content-based Recommendation
+- 4,803 Movies
+- Content-Based Recommendation
 - Metadata Analysis
+
+### Features
+
+✅ Content-Based Recommendation
+
+✅ Interactive Dashboard
+
+✅ Rating Distribution
+
+✅ Genre Distribution
+
+✅ Release Trend
+
+✅ K-Means Movie Clustering
 
 ### Upcoming Features
 
-- 🎬 Movie Posters
-- 🤖 K-Means Clustering
-- 📊 Advanced Dashboard
-- 🧠 Psychological Recommendation Engine
-- 🎭 Mood Prediction
+🎬 Movie Posters
+
+🧠 Psychological Recommendation Engine
+
+🔍 Smart Search
+
+☁️ Deployment
 """)
