@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from src.psychology import PsychologyEngine
+
 
 class TMDBRecommender:
 
@@ -20,6 +22,8 @@ class TMDBRecommender:
         )
 
         self.similarity = cosine_similarity(self.matrix)
+
+        self.psychology = PsychologyEngine()
 
     def recommend(self, movie_title, top_n=10):
 
@@ -46,7 +50,7 @@ class TMDBRecommender:
 
         movie_indices = [i[0] for i in scores]
 
-        return self.movies.iloc[movie_indices][
+        results = self.movies.iloc[movie_indices][
             [
                 "title",
                 "genres",
@@ -54,4 +58,10 @@ class TMDBRecommender:
                 "release_date",
                 "overview"
             ]
-        ]
+        ].copy()
+
+        results["emotions"] = results["genres"].apply(
+            self.psychology.emotions_from_genres
+        )
+
+        return results
