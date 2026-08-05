@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Skill(developing-with-streamlit)",
-      "PowerShell(python -m streamlit run app.py)"
-    ]
-  }
-}
