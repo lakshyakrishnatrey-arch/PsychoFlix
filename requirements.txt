@@ -1,4 +1,3 @@
-[Here will be the content of the requirements.txt file with dependencies like streamlit, pandas, scikit-learn, etc.]
 streamlit
 pandas
 numpy
