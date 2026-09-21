@@ -15,7 +15,9 @@ def show_mood(mood_engine):
             "🌈 Escapism",
             "⚡ Excited",
             "📚 Learning",
-            "❤️ Romantic"
+            "❤️ Romantic",
+            "😡 Angry",
+            "😤 Frustrated"
         ]
     )
 

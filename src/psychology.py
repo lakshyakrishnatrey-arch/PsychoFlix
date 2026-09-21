@@ -12,9 +12,9 @@ class PsychologyEngine:
 
             "Adventure": ["💪 Motivated", "😊 Happy"],
 
-            "Action": ["💪 Motivated"],
+            "Action": ["💪 Motivated", "😡 Angry"],
 
-            "Drama": ["🤔 Reflective"],
+            "Drama": ["🤔 Reflective", "😤 Frustrated"],
 
             "Romance": ["❤️ Romantic"],
 
@@ -22,11 +22,11 @@ class PsychologyEngine:
 
             "Science Fiction": ["🤔 Curious", "🌈 Escapism"],
 
-            "Mystery": ["🤔 Curious"],
+            "Mystery": ["🤔 Curious", "😤 Frustrated"],
 
-            "Thriller": ["⚡ Excited"],
+            "Thriller": ["⚡ Excited", "😤 Frustrated"],
 
-            "Crime": ["⚡ Excited"],
+            "Crime": ["⚡ Excited", "😡 Angry"],
 
             "Horror": ["😱 Fear"],
 
@@ -34,11 +34,11 @@ class PsychologyEngine:
 
             "History": ["📚 Learning"],
 
-            "War": ["🤔 Reflective"],
+            "War": ["🤔 Reflective", "😡 Angry"],
 
             "Music": ["😊 Happy"],
 
-            "Western": ["💪 Motivated"]
+            "Western": ["💪 Motivated", "😡 Angry"]
         }
 
     def emotions_from_genres(self, genres):
