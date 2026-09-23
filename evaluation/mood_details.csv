@@ -1,0 +1,13 @@
+mood_label,engine_key,is_supported,movie_count,coverage_pct,filter_accuracy,alignment_score,mean_rating,mapped_genres
+Happy,😊 Happy,True,2499,52.03,1.0,0.5508,6.04,"Adventure, Animation, Comedy, Family, Music"
+Sad,😢 Sad,False,0,0.0,0.0,0.0,0.0,None (Not defined in PsychologyEngine)
+Relaxed,😌 Relaxed,True,1961,40.83,1.0,0.544,5.98,"Animation, Comedy, Family"
+Motivated,💪 Motivated,True,1517,31.58,1.0,0.4336,6.07,"Action, Adventure, Western"
+Stressed,😫 Stressed,False,0,0.0,0.0,0.0,0.0,None (Not defined in PsychologyEngine)
+Reflective,🤔 Reflective,True,2323,48.37,1.0,0.4893,6.39,"Drama, War"
+Escapism,🌈 Escapism,True,874,18.2,1.0,0.3513,6.07,"Fantasy, Science Fiction"
+Excited,⚡ Excited,True,1556,32.4,1.0,0.4345,6.06,"Crime, Thriller"
+Learning,📚 Learning,True,301,6.27,1.0,0.5191,6.54,"Documentary, History"
+Romantic,❤️ Romantic,True,894,18.61,1.0,0.3843,6.21,Romance
+Angry,😡 Angry,True,1700,35.39,1.0,0.4093,6.14,"Action, Crime, War, Western"
+Frustrated,😤 Frustrated,True,3073,63.98,1.0,0.5349,6.25,"Drama, Mystery, Thriller"

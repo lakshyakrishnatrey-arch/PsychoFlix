@@ -1,0 +1,60 @@
+component,metric,value
+Recommender,Genre-Overlap Precision@5,0.828
+Recommender,Genre-Overlap Precision@10,0.83
+Recommender,Genre-Overlap Accuracy (Hit Rate),0.83
+Recommender,Mean Cosine Similarity (top-10),0.126
+Recommender,Sample Size (queries),50.0
+Clustering,Silhouette Score (K=5),0.0042
+Clustering,Inertia (K=5),4670.04
+Clustering,Cluster Purity (K=5),0.6982
+Clustering,Silhouette Score (K=7),0.0044
+Clustering,Inertia (K=7),4651.56
+Clustering,Cluster Purity (K=7),0.7143
+Clustering,Silhouette Score (K=10) (current),0.0052
+Clustering,Inertia (K=10) (current),4630.77
+Clustering,Cluster Purity (K=10) (current),0.7495
+Clustering,Silhouette Score (K=12),0.0053
+Clustering,Inertia (K=12),4618.46
+Clustering,Cluster Purity (K=12),0.7288
+Clustering,Silhouette Score (K=15),0.0057
+Clustering,Inertia (K=15),4604.0
+Clustering,Cluster Purity (K=15),0.7393
+Clustering,Optimal K by Silhouette,15.0
+Mood,Alignment Score (Happy),0.5508
+Mood,Coverage Pct (Happy),52.03
+Mood,Filter Accuracy (Happy),1.0
+Mood,Alignment Score (Sad),0.0
+Mood,Coverage Pct (Sad),0.0
+Mood,Filter Accuracy (Sad),0.0
+Mood,Alignment Score (Relaxed),0.544
+Mood,Coverage Pct (Relaxed),40.83
+Mood,Filter Accuracy (Relaxed),1.0
+Mood,Alignment Score (Motivated),0.4336
+Mood,Coverage Pct (Motivated),31.58
+Mood,Filter Accuracy (Motivated),1.0
+Mood,Alignment Score (Stressed),0.0
+Mood,Coverage Pct (Stressed),0.0
+Mood,Filter Accuracy (Stressed),0.0
+Mood,Alignment Score (Reflective),0.4893
+Mood,Coverage Pct (Reflective),48.37
+Mood,Filter Accuracy (Reflective),1.0
+Mood,Alignment Score (Escapism),0.3513
+Mood,Coverage Pct (Escapism),18.2
+Mood,Filter Accuracy (Escapism),1.0
+Mood,Alignment Score (Excited),0.4345
+Mood,Coverage Pct (Excited),32.4
+Mood,Filter Accuracy (Excited),1.0
+Mood,Alignment Score (Learning),0.5191
+Mood,Coverage Pct (Learning),6.27
+Mood,Filter Accuracy (Learning),1.0
+Mood,Alignment Score (Romantic),0.3843
+Mood,Coverage Pct (Romantic),18.61
+Mood,Filter Accuracy (Romantic),1.0
+Mood,Alignment Score (Angry),0.4093
+Mood,Coverage Pct (Angry),35.39
+Mood,Filter Accuracy (Angry),1.0
+Mood,Alignment Score (Frustrated),0.5349
+Mood,Coverage Pct (Frustrated),63.98
+Mood,Filter Accuracy (Frustrated),1.0
+Mood,Mean Alignment Score (Supported Moods),0.4651
+Mood,Mean Catalog Coverage Pct (Supported Moods),34.77

@@ -1,0 +1,51 @@
+query_movie,query_genres,precision_at_5,precision_at_10,mean_cosine_sim,relevant_top5,relevant_top10
+I Spy,Action|Adventure|Comedy|Thriller,1.0,1.0,0.1153,5,10
+Split Second,Thriller|Action|Horror|Science Fiction|Crime,1.0,1.0,0.1042,5,10
+Gossip,Drama|Mystery|Thriller,0.6,0.7,0.0868,3,7
+Vicky Cristina Barcelona,Drama|Romance,1.0,0.9,0.1122,5,9
+Harry Potter and the Half-Blood Prince,Adventure|Fantasy|Family,1.0,0.7,0.2407,5,7
+AVP: Alien vs. Predator,Adventure|Science Fiction|Action,1.0,1.0,0.1213,5,10
+The Contender,Drama|Thriller,0.8,0.8,0.0833,4,8
+Meet the Parents,Comedy|Romance,1.0,0.7,0.1235,5,7
+Away We Go,Drama|Comedy|Romance,0.8,0.9,0.0977,4,9
+Sleep Dealer,Drama|Science Fiction|Thriller,1.0,1.0,0.1215,5,10
+In Her Line of Fire,Drama|Action|Thriller,0.8,0.9,0.1283,4,9
+Beyond the Lights,Romance|Drama,1.0,1.0,0.0891,5,10
+The Front Page,Romance|Drama|Comedy,1.0,0.9,0.1088,5,9
+Taxi Driver,Crime|Drama,0.4,0.7,0.1433,2,7
+Knight and Day,Action|Comedy,0.6,0.8,0.1108,3,8
+End of Days,Action|Fantasy|Horror|Mystery,0.6,0.6,0.1215,3,6
+Code 46,Drama|Romance|Science Fiction|Thriller,0.8,0.9,0.0927,4,9
+Double Take,Adventure|Drama|Action|Comedy|Romance,1.0,1.0,0.1265,5,10
+Tidal Wave,Action|Adventure|Drama|Thriller,1.0,0.9,0.091,5,9
+I Heart Huckabees,Comedy|Romance,0.4,0.3,0.0931,2,3
+My Own Private Idaho,Drama|Romance,1.0,0.9,0.1218,5,9
+Bandits,Action|Comedy|Crime|Romance,0.8,0.9,0.1468,4,9
+Crazy in Alabama,Comedy|Drama,0.6,0.7,0.1108,3,7
+(500) Days of Summer,Comedy|Drama|Romance,0.8,0.9,0.1248,4,9
+Extremely Loud & Incredibly Close,Drama,0.6,0.7,0.1096,3,7
+The Artist,Drama|Comedy|Romance,1.0,1.0,0.1526,5,10
+Stan Helsing,Comedy|Horror,0.6,0.7,0.1031,3,7
+The Relic,Horror|Mystery|Thriller,0.4,0.5,0.115,2,5
+The Midnight Meat Train,Mystery|Drama|Crime|Thriller|Horror,0.8,0.8,0.1321,4,8
+Ghost Rider: Spirit of Vengeance,Action|Fantasy|Thriller,0.6,0.8,0.1118,3,8
+My Summer of Love,Drama|Thriller|Romance,0.8,0.8,0.1004,4,8
+Dark Blue,Action|Crime|Drama|Thriller,0.8,0.9,0.1411,4,9
+Kill Bill: Vol. 1,Action|Crime,1.0,0.9,0.1496,5,9
+Meek's Cutoff,Drama|Western,1.0,0.8,0.1128,5,8
+The Master,Drama,0.8,0.8,0.1492,4,8
+Once Upon a Time in the West,Western,0.8,0.6,0.135,4,6
+The Golden Compass,Adventure|Fantasy,0.6,0.5,0.0873,3,5
+The Monuments Men,War|Drama|History|Action,1.0,1.0,0.191,5,10
+The Egyptian,History|Drama,0.8,0.7,0.0744,4,7
+Free Style,Drama|Family,1.0,1.0,0.0997,5,10
+X-Men: The Last Stand,Adventure|Action|Science Fiction|Thriller,1.0,0.9,0.2615,5,9
+Rocky,Drama,1.0,0.8,0.1743,5,8
+Pitch Black,Thriller|Science Fiction|Action,1.0,1.0,0.1273,5,10
+Iron Man 2,Adventure|Action|Science Fiction,1.0,1.0,0.2727,5,10
+Ruby in Paradise,Drama|Romance,0.6,0.8,0.0972,3,8
+The Smurfs,Animation|Family|Adventure|Comedy|Fantasy,1.0,1.0,0.1277,5,10
+Oliver!,Drama|Family|Music,1.0,1.0,0.1238,5,10
+The Celebration,Drama,0.8,0.9,0.1202,4,9
+The Last Witch Hunter,Fantasy|Action|Adventure,0.8,0.8,0.1197,4,8
+Prom Night,Crime|Horror,0.6,0.7,0.0926,3,7
